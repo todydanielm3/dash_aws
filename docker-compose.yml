@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+
+  pgsql:
+    image: postgres
+    container_name: dash_pgsql
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  dash:
+    build:
+      context: .
+      dockerfile: Dockerfile.dash
+    container_name: dash_dash
+    command: python app.py
+    volumes:
+      - .:/code
+    ports:
+      - "80:666"
+    depends_on:
+      - pgsql
+
